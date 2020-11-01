@@ -9,7 +9,7 @@ public class QuestionService {
 	
 	public Question getQuestionById(ObjectContext objContext, String id) {
 		Question q = ObjectSelect.query(Question.class).where(Question.QUESTION_ID.eq(id)).selectFirst(objContext);
-		return (null);
+		return (q);
 	}
 
 }

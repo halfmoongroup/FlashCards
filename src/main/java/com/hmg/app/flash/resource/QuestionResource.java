@@ -8,6 +8,7 @@ import org.apache.cayenne.configuration.server.ServerRuntime;
 
 import com.hmg.app.flash.api.request.QuestionDto;
 import com.hmg.app.flash.model.Question;
+import com.hmg.app.flash.service.QuestionService;
 
 @Path("/question")
 public class QuestionResource {
