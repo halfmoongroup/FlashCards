@@ -23,6 +23,12 @@
 		<db-attribute name="question_id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
 		<db-attribute name="test_id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
 	</db-entity>
+	<db-entity name="user">
+		<db-attribute name="email" type="VARCHAR" length="128"/>
+		<db-attribute name="first_name" type="VARCHAR" length="64"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="last_name" type="VARCHAR" length="64"/>
+	</db-entity>
 	<obj-entity name="Question" className="com.hmg.app.flash.model.Question" dbEntityName="question">
 		<obj-attribute name="answer" type="java.lang.String" db-attribute-path="answer"/>
 		<obj-attribute name="answerImage" type="java.lang.String" db-attribute-path="answer_image"/>
@@ -42,11 +48,17 @@
 	<db-relationship name="testquestions" source="test" target="testquestion" toDependentPK="true" toMany="true">
 		<db-attribute-pair source="id" target="test_id"/>
 	</db-relationship>
+	<db-relationship name="user" source="test" target="user" toMany="true">
+		<db-attribute-pair source="user_id" target="id"/>
+	</db-relationship>
 	<db-relationship name="question" source="testquestion" target="question" toMany="false">
 		<db-attribute-pair source="question_id" target="id"/>
 	</db-relationship>
 	<db-relationship name="test" source="testquestion" target="test" toMany="false">
 		<db-attribute-pair source="test_id" target="id"/>
+	</db-relationship>
+	<db-relationship name="tests" source="user" target="test" toMany="false">
+		<db-attribute-pair source="id" target="user_id"/>
 	</db-relationship>
 	<obj-relationship name="tests" source="Question" target="Test" db-relationship-path="testquestions.test"/>
 	<obj-relationship name="questions" source="Test" target="Question" db-relationship-path="testquestions.question"/>
