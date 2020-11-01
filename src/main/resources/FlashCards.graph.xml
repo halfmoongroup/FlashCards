@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<graphs xmlns="http://cayenne.apache.org/schema/10/graph">
+	<graph type="ER" scale="1.0">
+		<entity name="App_User" x="943.44" y="694.4" width="124.0" height="187.0"/>
+		<entity name="Test" x="480.65" y="630.81" width="183.0" height="261.0"/>
+		<entity name="TestQuestion" x="507.9" y="255.02" width="171.0" height="150.0"/>
+		<entity name="Question" x="178.0" y="255.89" width="190.0" height="261.0"/>
+	</graph>
+	<graph type="CLASS" scale="1.0">
+		<entity name="Test" x="276.62" y="163.23" width="177.0" height="187.0"/>
+		<entity name="Question" x="240.0" y="550.6" width="179.0" height="224.0"/>
+		<entity name="AppUser" x="887.06" y="188.0" width="113.0" height="150.0"/>
+	</graph>
+</graphs>

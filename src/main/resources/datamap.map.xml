@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/9/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/9/modelMap https://cayenne.apache.org/schema/9/modelMap.xsd"
+	 project-version="9">
+	<property name="defaultPackage" value="com.hmg.app.flash.model"/>
+	<db-entity name="question" schema="public">
+		<db-attribute name="answer" type="VARCHAR" isMandatory="true" length="2048"/>
+		<db-attribute name="answer_image" type="VARCHAR" length="2048"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="question" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="questionId" type="VARCHAR" length="16"/>
+		<db-attribute name="question_image" type="VARCHAR" length="2048"/>
+	</db-entity>
+	<db-entity name="test" schema="public">
+		<db-attribute name="complete_date" type="DATE" length="13"/>
+		<db-attribute name="create_date" type="DATE" length="13"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="question_count" type="INTEGER" length="10"/>
+		<db-attribute name="user_id" type="INTEGER" isMandatory="true" length="10"/>
+	</db-entity>
+	<db-entity name="testquestion" schema="public">
+		<db-attribute name="question_id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="test_id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+	</db-entity>
+	<obj-entity name="Question" className="com.hmg.app.flash.model.Question" dbEntityName="question">
+		<obj-attribute name="answer" type="java.lang.String" db-attribute-path="answer"/>
+		<obj-attribute name="answerImage" type="java.lang.String" db-attribute-path="answer_image"/>
+		<obj-attribute name="question" type="java.lang.String" db-attribute-path="question"/>
+		<obj-attribute name="questionId" type="java.lang.String" db-attribute-path="questionId"/>
+		<obj-attribute name="questionImage" type="java.lang.String" db-attribute-path="question_image"/>
+	</obj-entity>
+	<obj-entity name="Test" className="com.hmg.app.flash.model.Test" dbEntityName="test">
+		<obj-attribute name="completeDate" type="java.time.LocalDate" db-attribute-path="complete_date"/>
+		<obj-attribute name="createDate" type="java.time.LocalDate" db-attribute-path="create_date"/>
+		<obj-attribute name="questionCount" type="int" db-attribute-path="question_count"/>
+		<obj-attribute name="userId" type="int" db-attribute-path="user_id"/>
+	</obj-entity>
+	<db-relationship name="testquestions" source="question" target="testquestion" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="question_id"/>
+	</db-relationship>
+	<db-relationship name="testquestions" source="test" target="testquestion" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="id" target="test_id"/>
+	</db-relationship>
+	<db-relationship name="question" source="testquestion" target="question" toMany="false">
+		<db-attribute-pair source="question_id" target="id"/>
+	</db-relationship>
+	<db-relationship name="test" source="testquestion" target="test" toMany="false">
+		<db-attribute-pair source="test_id" target="id"/>
+	</db-relationship>
+	<obj-relationship name="tests" source="Question" target="Test" db-relationship-path="testquestions.test"/>
+	<obj-relationship name="questions" source="Test" target="Question" db-relationship-path="testquestions.question"/>
+</data-map>
