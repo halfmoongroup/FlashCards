@@ -4,62 +4,67 @@
 	 xsi:schemaLocation="http://cayenne.apache.org/schema/9/modelMap https://cayenne.apache.org/schema/9/modelMap.xsd"
 	 project-version="9">
 	<property name="defaultPackage" value="com.hmg.app.flash.model"/>
-	<db-entity name="question" schema="public">
-		<db-attribute name="answer" type="VARCHAR" isMandatory="true" length="2048"/>
-		<db-attribute name="answer_image" type="VARCHAR" length="2048"/>
-		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
-		<db-attribute name="question" type="VARCHAR" isMandatory="true" length="1024"/>
-		<db-attribute name="questionId" type="VARCHAR" length="16"/>
-		<db-attribute name="question_image" type="VARCHAR" length="2048"/>
-	</db-entity>
-	<db-entity name="test" schema="public">
+	<db-entity name="deck" schema="public">
 		<db-attribute name="complete_date" type="DATE" length="13"/>
 		<db-attribute name="create_date" type="DATE" length="13"/>
+		<db-attribute name="deck_id" type="VARCHAR" length="32"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="owner_id" type="INTEGER" isMandatory="true" length="10"/>
 		<db-attribute name="question_count" type="INTEGER" length="10"/>
-		<db-attribute name="user_id" type="INTEGER" isMandatory="true" length="10"/>
+		<db-attribute name="visibility" type="VARCHAR" length="16"/>
 	</db-entity>
-	<db-entity name="testquestion" schema="public">
-		<db-attribute name="question_id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
-		<db-attribute name="test_id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
-	</db-entity>
-	<db-entity name="user">
+	<db-entity name="fc_user">
 		<db-attribute name="email" type="VARCHAR" length="128"/>
 		<db-attribute name="first_name" type="VARCHAR" length="64"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="last_name" type="VARCHAR" length="64"/>
+		<db-attribute name="user_name" type="VARCHAR" length="64"/>
 	</db-entity>
+	<db-entity name="question" schema="public">
+		<db-attribute name="answer" type="VARCHAR" isMandatory="true" length="2048"/>
+		<db-attribute name="answer_image" type="VARCHAR" length="2048"/>
+		<db-attribute name="deck_id" type="INTEGER"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="question" type="VARCHAR" isMandatory="true" length="1024"/>
+		<db-attribute name="questionId" type="VARCHAR" length="16"/>
+		<db-attribute name="question_image" type="VARCHAR" length="2048"/>
+		<db-attribute name="question_index" type="INTEGER"/>
+	</db-entity>
+	<obj-entity name="Deck" className="com.hmg.app.flash.model.Deck" dbEntityName="deck">
+		<obj-attribute name="completeDate" type="java.time.LocalDate" db-attribute-path="complete_date"/>
+		<obj-attribute name="createDate" type="java.time.LocalDate" db-attribute-path="create_date"/>
+		<obj-attribute name="deckId" type="java.lang.String" db-attribute-path="deck_id"/>
+		<obj-attribute name="questionCount" type="int" db-attribute-path="question_count"/>
+		<obj-attribute name="visibility" type="com.hmg.app.flash.api.DeckVisibility" db-attribute-path="visibility"/>
+	</obj-entity>
+	<obj-entity name="FCUser" className="com.hmg.app.flash.model.FCUser" dbEntityName="fc_user">
+		<obj-attribute name="email" type="java.lang.String" db-attribute-path="email"/>
+		<obj-attribute name="firstName" type="java.lang.String" db-attribute-path="first_name"/>
+		<obj-attribute name="lastName" type="java.lang.String" db-attribute-path="last_name"/>
+		<obj-attribute name="userName" type="java.lang.String" db-attribute-path="user_name"/>
+	</obj-entity>
 	<obj-entity name="Question" className="com.hmg.app.flash.model.Question" dbEntityName="question">
 		<obj-attribute name="answer" type="java.lang.String" db-attribute-path="answer"/>
 		<obj-attribute name="answerImage" type="java.lang.String" db-attribute-path="answer_image"/>
 		<obj-attribute name="question" type="java.lang.String" db-attribute-path="question"/>
 		<obj-attribute name="questionId" type="java.lang.String" db-attribute-path="questionId"/>
 		<obj-attribute name="questionImage" type="java.lang.String" db-attribute-path="question_image"/>
+		<obj-attribute name="questionIndex" type="int" db-attribute-path="question_index"/>
 	</obj-entity>
-	<obj-entity name="Test" className="com.hmg.app.flash.model.Test" dbEntityName="test">
-		<obj-attribute name="completeDate" type="java.time.LocalDate" db-attribute-path="complete_date"/>
-		<obj-attribute name="createDate" type="java.time.LocalDate" db-attribute-path="create_date"/>
-		<obj-attribute name="questionCount" type="int" db-attribute-path="question_count"/>
-		<obj-attribute name="userId" type="int" db-attribute-path="user_id"/>
-	</obj-entity>
-	<db-relationship name="testquestions" source="question" target="testquestion" toDependentPK="true" toMany="true">
-		<db-attribute-pair source="id" target="question_id"/>
+	<db-relationship name="questions" source="deck" target="question" toMany="true">
+		<db-attribute-pair source="id" target="deck_id"/>
 	</db-relationship>
-	<db-relationship name="testquestions" source="test" target="testquestion" toDependentPK="true" toMany="true">
-		<db-attribute-pair source="id" target="test_id"/>
+	<db-relationship name="user" source="deck" target="fc_user" toMany="false">
+		<db-attribute-pair source="owner_id" target="id"/>
 	</db-relationship>
-	<db-relationship name="user" source="test" target="user" toMany="true">
-		<db-attribute-pair source="user_id" target="id"/>
+	<db-relationship name="tests" source="fc_user" target="deck" toMany="true">
+		<db-attribute-pair source="id" target="owner_id"/>
 	</db-relationship>
-	<db-relationship name="question" source="testquestion" target="question" toMany="false">
-		<db-attribute-pair source="question_id" target="id"/>
+	<db-relationship name="deck" source="question" target="deck" toMany="false">
+		<db-attribute-pair source="deck_id" target="id"/>
 	</db-relationship>
-	<db-relationship name="test" source="testquestion" target="test" toMany="false">
-		<db-attribute-pair source="test_id" target="id"/>
-	</db-relationship>
-	<db-relationship name="tests" source="user" target="test" toMany="false">
-		<db-attribute-pair source="id" target="user_id"/>
-	</db-relationship>
-	<obj-relationship name="tests" source="Question" target="Test" db-relationship-path="testquestions.test"/>
-	<obj-relationship name="questions" source="Test" target="Question" db-relationship-path="testquestions.question"/>
+	<obj-relationship name="questions" source="Deck" target="Question" deleteRule="Deny" db-relationship-path="questions"/>
+	<obj-relationship name="user" source="Deck" target="FCUser" deleteRule="Deny" db-relationship-path="user"/>
+	<obj-relationship name="decks" source="FCUser" target="Deck" deleteRule="Cascade" db-relationship-path="tests"/>
+	<obj-relationship name="decks" source="Question" target="Deck" db-relationship-path="deck"/>
 </data-map>

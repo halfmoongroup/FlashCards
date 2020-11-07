@@ -1,0 +1,35 @@
+
+appInfo:
+   appUserId: FlashCard
+
+
+cayenne:
+  configs:
+   - cayenne-FlashCards.xml
+
+jdbc:
+   db1:
+      jdbcUrl: jdbc:postgresql://localhost:5432/FlashCard
+      driverClassName: org.postgresql.Driver
+      username: flashmgr
+      password: password
+      maximumPoolSize: 10
+      minimumIdle: 10
+      type: hikari
+   
+jetty: 
+ context: "/"
+  
+
+log:
+  useLogbackConfig: true
+  level: 'debug'
+  loggers:
+    org.apache.jetty:
+      level: 'all'
+    io.bootique.jetty:
+      level: 'all'
+    io.bootique.jersey:
+      level: 'all'
+    com.nyt.ecomm.apps.cohort:
+      level: 'all'
