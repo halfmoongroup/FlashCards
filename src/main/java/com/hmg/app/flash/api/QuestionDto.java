@@ -17,6 +17,7 @@ public class QuestionDto {
 	private String answerImageUrl;
 	private String questionId;
 	private String deckId;
+	private String testId;
 	
 	public boolean isTestQuestion() {
 		log.debug("is question in deck: "+deckId );

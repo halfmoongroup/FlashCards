@@ -19,7 +19,7 @@ public class FlashCards {
 		BQModule module = binder -> 
 			JerseyModule.extend(binder)
 				.addResource(QuestionResource.class)
-				.addStaticServlet("abc", "/abc/*");
+				;
 
 		Bootique
 			.app(args)
