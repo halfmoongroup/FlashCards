@@ -10,17 +10,21 @@ import io.bootique.Bootique;
 import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
 import io.bootique.jersey.JerseyModule;
+import io.bootique.jetty.JettyModule;
 
 public class FlashCards {
     private static final Logger log = LoggerFactory.getLogger(FlashCards.class);
 
 	public static void main(String[] args) {
 		log.debug("Starting flashcard application");
-		BQModule module = binder -> 
+		BQModule module = binder -> {
 			JerseyModule.extend(binder)
-				.addResource(QuestionResource.class)
-				;
-
+				.addResource(QuestionResource.class);
+			JettyModule.extend(binder).useDefaultServlet();
+			BQCoreModule.extend(binder)
+				.setProperty("bq.jetty.staticResourceBase","resources/docroot/")
+				.setProperty("bq.jetty.context", "/flashcard");
+		};
 		Bootique
 			.app(args)
 			.module(module)
